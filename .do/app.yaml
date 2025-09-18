@@ -1,0 +1,22 @@
+name: event-information-mcp
+region: nyc
+services:
+  - name: event-information-mcp-server
+    github:
+      branch: main
+      deploy_on_push: true
+      repo: ajot/event-information-mcp-server
+    build_command: pip install -r requirements.txt
+    run_command: python event-agent.py
+    envs:
+      - key: PORT
+        value: "8080"
+      - key: GRADIENT_AGENT_ACCESS_KEY
+        value: "${GRADIENT_AGENT_ACCESS_KEY}"
+      - key: GRADIENT_AGENT_ENDPOINT
+        value: "${GRADIENT_AGENT_ENDPOINT}"
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: apps-s-1vcpu-0.5gb
+    routes:
+      - path: / 
