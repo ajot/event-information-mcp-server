@@ -31,9 +31,12 @@ class EventAgent:
             agent_endpoint = os.environ.get("GRADIENT_AGENT_ENDPOINT")
 
             if not agent_access_key or not agent_endpoint:
-                raise ValueError(
-                    "Missing required environment variables: GRADIENT_AGENT_ACCESS_KEY and GRADIENT_AGENT_ENDPOINT must be set"
+                logger.warning(
+                    "Missing required environment variables: GRADIENT_AGENT_ACCESS_KEY and GRADIENT_AGENT_ENDPOINT. "
+                    "Agent will not be functional until these are set."
                 )
+                self.client = None
+                return
 
             # Initialize using the correct agent pattern
             self.client = Gradient(
@@ -49,7 +52,7 @@ class EventAgent:
         """Query the AI agent for event information"""
         if not self.client:
             return {
-                "error": "EventAgent not properly initialized.",
+                "error": "EventAgent not configured. Please set GRADIENT_AGENT_ACCESS_KEY and GRADIENT_AGENT_ENDPOINT environment variables.",
                 "status": "error"
             }
 
